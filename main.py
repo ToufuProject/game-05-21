@@ -42,6 +42,7 @@ music_done = False
 pygame.init()
 pygame.mixer.init()
 pygame.mixer.music.load(BGM_PATH)
+pygame.mixer.music.play(-1)
 screen = pygame.display.set_mode((YOKO, TATE))
 
 class Player(pygame.sprite.Sprite):
@@ -55,6 +56,7 @@ class Player(pygame.sprite.Sprite):
         self.vx = 0
         self.vy = 0
         self.uteru = True
+        self.life = 3
 
     def update(self):
         keys = pygame.key.get_pressed()
