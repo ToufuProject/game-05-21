@@ -1,0 +1,101 @@
+###################
+プレイヤーにライフをつけよう！
+###################
+
+# STEP1：プレイヤーのライフが今幾つなのかは覚えておいて欲しいデータ
+# ってことは？
+
+
+# STEP1-2：プレイヤーのライフを表示しよう
+# 下のプログラムをif boss.alive():の上に置いてあげよう！
+
+# ライフの表示
+font = pygame.font.SysFont(None, 36)
+life_text = font.render(f'Life: {player.life}', True, (255, 255, 255))
+screen.blit(life_text, (10, 10))
+
+# STEP2：当たり判定を改造して、プレイヤーが敵やボス、ボスのファイヤーボールにぶつかったらライフが減るプログラムを作ろう
+# 当たったらライフを減らしてっていうお願いを作る
+# ってことは？
+# game_overはプレイヤーのクラス内の変数ではないけど、global game_overとすることで使えるようになるよ
+
+
+# STEP3：ライフが減るプログラムはいつ使えばいいのかな？
+# ヒント：ぶつかった時！！！！！！！！！！！！！！！！！！！！！！！
+
+
+# STEP4：ライフが減るプログラムを改造しよう！
+# 問題点があるかも
+# そこを直そう
+
+
+
+###################
+ゲームのクリア演出をつけよう！
+###################
+
+# STEP1：これをつけよう
+# if boss.alive():のプログラムの下につけよう
+
+if clear:
+        f_big = pygame.font.SysFont(None, 74)
+        txt_big = f_big.render('GAME CLEAR!!', True, (255, 255, 0))
+        rect_big = txt_big.get_rect(center=(YOKO/2, TATE/2))
+        screen.blit(txt_big, rect_big)
+
+# STEP2：ゲームクリアになったらclearの中身をTrueにしよう！
+# ヒント：どのタイミングでゲームクリアなの？
+
+
+# STEP3：ゲームにクリアしたら
+# 星を出そう
+if random.random() < 0.3:  # 星の出る確率
+            star = Star()
+            all_sprites.add(star)
+
+- 敵にファイヤーボールを打たせるための参考プログラム
+class BossFireball(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        size = (16, 16)
+        self.image = pygame.Surface(size)
+        self.image.fill((0, 0, 255))  # 適宜見やすい色
+        self.rect = self.image.get_rect(center=(x, y))
+        self.vx = 6  # 右に飛ぶ
+
+    def update(self):
+        self.rect.x += self.vx
+        # 画面外に出たら削除
+        if self.rect.left > YOKO or self.rect.right < 0:
+            self.kill()
+
+# ボスを作ろう
+# ボスの画像はBOSS_DIR
+# ボスのパラメーター：サイズ、速さ、ライフ、
+class Boss(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+        size = (64,64)
+        self.image = pygame.Surface(size)
+        self.image.fill((255,0,0))
+        self.vx = -1
+        self.rect = self.image.get_rect()
+        self.rect.x = 400
+        self.rect.y = 400
+        self.life = 50
+        self.vx = 3
+        self.last_shot_time = 0
+        self.shot_interval = 2.0
+
+    def update(self):
+        current_time = pygame.time.get_ticks() / 1000
+        if current_time - self.last_shot_time > self.shot_interval:
+            bf = BossFireball(self.rect.centerx, self.rect.centery)
+            boss_fireballs.add(bf)
+            all_sprites.add(bf)
+            self.last_shot_time = current_time
+        if self.life <= 0:
+            self.kill()
+
+
+# bossのらいふが0になったらゲームクリア
