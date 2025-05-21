@@ -282,7 +282,9 @@ while kurikaeshi:
     screen.fill((0, 0, 0))
     all_sprites.draw(screen)
     teki_hako.draw(screen)
-
+    font = pygame.font.SysFont(None, 36)
+    life_text = font.render(f'Life: {player.life}', True, (255, 255, 255))
+    screen.blit(life_text, (10, 10))
     # ボスのライフバー
     if boss.alive():
         draw_boss_life(screen, boss)
