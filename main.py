@@ -56,7 +56,7 @@ class Player(pygame.sprite.Sprite):
         self.vx = 0
         self.vy = 0
         self.uteru = True
-        self.life = 3
+        self.life = 30
 
     def update(self):
         keys = pygame.key.get_pressed()
@@ -83,6 +83,11 @@ class Player(pygame.sprite.Sprite):
                 self.uteru = False
         else:
             self.uteru = True
+    def damage(self):
+        self.life -= 1
+        global game_over
+        if self.life == 0:
+            game_over = True
 
 
 class Teki(pygame.sprite.Sprite):
@@ -259,9 +264,9 @@ while kurikaeshi:
             last_enemy_time = current_time
 
         if pygame.sprite.spritecollide(player, teki_hako, dokill=True):
-            game_over = True
+            player.damage()
         if pygame.sprite.spritecollide(player, boss_fireballs, dokill=True):
-            game_over = True
+            player.damage()
 
         if boss.alive():
             hits = pygame.sprite.spritecollide(boss, fireballs, dokill=True)
