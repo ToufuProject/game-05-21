@@ -357,3 +357,4 @@ while kurikaeshi:
 
 
 pygame.quit()
+# これじゃ！！
