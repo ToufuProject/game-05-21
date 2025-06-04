@@ -245,6 +245,29 @@ def sine_update(b):
     if (b.rect.right<0 or b.rect.left>YOKO or
         b.rect.bottom<0 or b.rect.top>TATE): b.kill()
 
+
+def reset_game():
+    global game_over, clear, last_enemy_time
+    global player, boss          # ← ★ここを忘れずに
+
+    # 1. 既存スプライトを全部消す
+    all_sprites.empty()
+    teki_hako.empty()
+    fireballs.empty()
+    boss_fireballs.empty()
+
+    # 2. 主人公とボスを作り直し、**同時にグローバルを書き換える**
+    player = Player()
+    boss   = Boss()
+    all_sprites.add(player, boss)
+
+    # 3. フラグとタイムをリセット
+    game_over = False
+    clear = False
+    last_enemy_time = pygame.time.get_ticks() / 1000
+
+
+
 player = Player()
 all_sprites.add(player)
 boss = Boss()
@@ -256,6 +279,12 @@ while kurikaeshi:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             kurikaeshi = False
+        # もしキーボードが押されて(pygame.KEYDOWN)かつゲームオーバーだったら(game_over)、
+        # ヒント：if event.type == pygame.QUIT:はもしもバツボタンが押されたら
+        elif event.type == pygame.KEYDOWN and game_over:
+            print("まあそんな感じ")
+            # もしも押したボタン(event.keyが)スペースだったらreset_game()を実行
+
 
     if not game_over:
         if current_time - last_enemy_time > 1.5:
