@@ -56,7 +56,7 @@ class Player(pygame.sprite.Sprite):
         self.vx = 0
         self.vy = 0
         self.uteru = True
-        self.life = 30
+        self.life = 30000
 
     def update(self):
         keys = pygame.key.get_pressed()
@@ -303,6 +303,7 @@ while kurikaeshi:
                 boss.life -= len(hits)
                 if boss.life <= 0:
                     boss.kill()
+                    clear = True
 
         all_sprites.update()
         teki_hako.update()
@@ -316,6 +317,14 @@ while kurikaeshi:
     screen.fill((0, 0, 0))
     all_sprites.draw(screen)
     teki_hako.draw(screen)
+    if clear:
+        f_big = pygame.font.SysFont(None, 74)
+        txt_big = f_big.render('GAME CLEAR!!', True, (255, 255, 0))
+        rect_big = txt_big.get_rect(center=(YOKO/2, TATE/2))
+        screen.blit(txt_big, rect_big)
+        if random.random() < 0.3:  # 星の出る確率
+            star = Star()
+            all_sprites.add(star)
     font = pygame.font.SysFont(None, 36)
     life_text = font.render(f'Life: {player.life}', True, (255, 255, 255))
     screen.blit(life_text, (10, 10))
